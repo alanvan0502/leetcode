@@ -144,11 +144,71 @@ public class Solution {
 
         return lRoot.val == rRoot.val && isMirror(lRoot.left, rRoot.right) && isMirror(lRoot.right, rRoot.left);
     }
-//
-//    /**
-//     * Path sum
-//     */
-//    public static boolean hasPathSum(TreeNode root, int sum) {
-//
-//    }
+
+    /**
+     * Path sum
+     */
+    public static boolean hasPathSum(TreeNode root, int sum) {
+
+        if (root == null) {
+            return false;
+        }
+
+        int sub_sum = sum - root.val;
+        if (sub_sum == 0 && root.left == null && root.right == null) {
+            return true;
+        }
+
+        return hasPathSum(root.left, sub_sum) || hasPathSum(root.right, sub_sum);
+    }
+
+    /**
+     * Path sum 3
+     */
+    public static int pathSum(TreeNode root, int sum) {
+        if (root == null) {
+            return 0;
+        }
+        return pathSumStartingAtNode(root, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
+    }
+
+    private static int pathSumStartingAtNode(TreeNode root, int sum) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.val == null) {
+            return 0;
+        }
+        return (root.val == sum ? 1 : 0)
+                + pathSumStartingAtNode(root.left, sum - root.val)
+                + pathSumStartingAtNode(root.right, sum - root.val);
+    }
+
+    public static int countUnivalSubtrees(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return (isUnivalTree(root) ? 1 : 0)
+                + countUnivalSubtrees(root.left)
+                + countUnivalSubtrees(root.right);
+    }
+
+    public static boolean isUnivalTree(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        if (root.left == null && root.right == null) {
+            return true;
+        }
+        if (root.left == null) {
+            return root.val.equals(root.right.val) && isUnivalTree(root.right);
+        }
+        if (root.right == null) {
+            return root.val.equals(root.left.val) && isUnivalTree(root.left);
+        }
+        return root.val.equals(root.left.val)
+                && root.val.equals(root.right.val)
+                && isUnivalTree(root.right)
+                && isUnivalTree(root.left);
+    }
 }

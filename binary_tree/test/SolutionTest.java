@@ -2,39 +2,18 @@ package binary_tree.test;
 
 import binary_tree.model.Solution;
 import binary_tree.model.TreeNode;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SolutionTest {
 
-    TreeNode root;
-    TreeNode root1;
-    TreeNode root2;
-
-    @BeforeEach
-    void setUp() {
-        root = new TreeNode(1);
-        root.right = new TreeNode(2);
-        root.left = new TreeNode(2);
-        root.right.left = new TreeNode(4);
-        root.right.right = new TreeNode(3);
-        root.left.left = new TreeNode(3);
-        root.left.right = new TreeNode(4);
-
-        root1 = new TreeNode(1);
-        root1.right = new TreeNode(2);
-        root1.left = new TreeNode(2);
-        root1.right.right = new TreeNode(3);
-        root1.left.right = new TreeNode(3);
-
-        root2 = new TreeNode(2);
-        root2.left = new TreeNode(97);
-        root2.right = new TreeNode(97);
-        root2.left.right = new TreeNode(47);
-        root2.right.left = new TreeNode(80);
-        root2.left.right.left = new TreeNode(-7);
-        root2.right.left.right = new TreeNode(-7);
-    }
+    private TreeNode root = TreeNode.buildBinaryTree(1, 2, 2, 3, 4, 4, 3);
+    private TreeNode root1 = TreeNode.buildBinaryTree(1, 2, 2, 3, 3);
+    private TreeNode root2 = TreeNode.buildBinaryTree(2, 97, 97, 47, 80, -7, -7);
+    private TreeNode root3 = TreeNode.buildBinaryTree(5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1);
+    private TreeNode root4 = TreeNode.buildBinaryTree(5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1);
+    private TreeNode root5 = TreeNode.buildBinaryTree(10, 5, -3, 3, 2, null, 11, 3, -2, null, 1);
+    private TreeNode root6 = TreeNode.buildBinaryTree(-2, null, -3);
+    private TreeNode root7 = TreeNode.buildBinaryTree(5, 5, 1);
 
     @Test
     public void testTraversal() {
@@ -54,5 +33,22 @@ class SolutionTest {
         System.out.println(Solution.isSymmetric(root));
         System.out.println(Solution.isSymmetric(root1));
         System.out.println(Solution.isSymmetric(root2));
+    }
+
+    @Test
+    void testHasPathSum() {
+        System.out.println(Solution.hasPathSum(root3, 22));
+    }
+
+    @Test
+    void testPathSum() {
+        System.out.println(Solution.pathSum(root4, 22));
+        System.out.println(Solution.pathSum(root5, 8));
+        System.out.println(Solution.pathSum(root6, -5));
+    }
+
+    @Test
+    void testIsUniversalTree() {
+        System.out.println(Solution.countUnivalSubtrees(root7));
     }
 }
