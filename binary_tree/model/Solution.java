@@ -211,4 +211,129 @@ public class Solution {
                 && isUnivalTree(root.right)
                 && isUnivalTree(root.left);
     }
+
+    public static TreeNode buildTreeFromInorderAndPostorder(int[] inorder, int[] postorder) {
+        List<Integer> inOrderList = new ArrayList<>();
+        for (int i: inorder) {
+            inOrderList.add(i);
+        }
+        List<Integer> postOrderList = new ArrayList<>();
+        for (int i: postorder) {
+            postOrderList.add(i);
+        }
+        return buildTreeHelpFromInorderAndPostorder(inOrderList, postOrderList);
+    }
+
+    private static TreeNode buildTreeHelpFromInorderAndPostorder(List<Integer> inOrderList, List<Integer> postOrderList) {
+        if (postOrderList.size() == 1) {
+            return new TreeNode(postOrderList.get(0));
+        }
+        if (postOrderList.size() == 0) {
+            return null;
+        }
+
+        int rootVal = postOrderList.get(postOrderList.size() - 1);
+        List<Integer> leftInorder = new ArrayList<>();
+        List<Integer> rightInorder = new ArrayList<>();
+
+        Stack<Integer> leftPostOrderStack = new Stack<>();
+        List<Integer> leftPostOrder = new ArrayList<>();
+
+        Stack<Integer> rightPostOrderStack = new Stack<>();
+        List<Integer> rightPostOrder = new ArrayList<>();
+
+        boolean toRight = false;
+
+        for (int value : inOrderList) {
+            if (value == rootVal) {
+                toRight = true;
+                continue;
+            }
+            if (!toRight) {
+                leftInorder.add(value);
+            } else {
+                rightInorder.add(value);
+            }
+        }
+
+        for (int i = postOrderList.size() - 2; i >= 0; i--) {
+            if (rightPostOrderStack.size() < rightInorder.size()) {
+                rightPostOrderStack.push(postOrderList.get(i));
+            } else {
+                leftPostOrderStack.push(postOrderList.get(i));
+            }
+        }
+
+        TreeNode result = new TreeNode(rootVal);
+
+        while (!rightPostOrderStack.isEmpty()) {
+            rightPostOrder.add(rightPostOrderStack.pop());
+        }
+
+        while (!leftPostOrderStack.isEmpty()) {
+            leftPostOrder.add(leftPostOrderStack.pop());
+        }
+
+        result.left = buildTreeHelpFromInorderAndPostorder(leftInorder, leftPostOrder);
+        result.right = buildTreeHelpFromInorderAndPostorder(rightInorder, rightPostOrder);
+
+        return result;
+    }
+
+    public static TreeNode buildTreeFromPreOrderAndInorder(int[] preorder, int[] inorder) {
+        List<Integer> preOrderList = new ArrayList<>();
+        for (int i: preorder) {
+            preOrderList.add(i);
+        }
+        List<Integer> inOrderList = new ArrayList<>();
+        for (int i: inorder) {
+            inOrderList.add(i);
+        }
+        return buildTreeFromPreOrderAndInorderHelp(preOrderList, inOrderList);
+    }
+
+    private static TreeNode buildTreeFromPreOrderAndInorderHelp(List<Integer> preOrderList, List<Integer> inOrderList) {
+        if (preOrderList.size() == 1) {
+            return new TreeNode(preOrderList.get(0));
+        }
+        if (preOrderList.size() == 0) {
+            return null;
+        }
+
+        int rootVal = preOrderList.get(0);
+        List<Integer> leftInorder = new ArrayList<>();
+        List<Integer> rightInorder = new ArrayList<>();
+
+        List<Integer> leftPreOrder = new ArrayList<>();
+        List<Integer> rightPreOrder = new ArrayList<>();
+
+        boolean toRight = false;
+
+        for (int value : inOrderList) {
+            if (value == rootVal) {
+                toRight = true;
+                continue;
+            }
+            if (!toRight) {
+                leftInorder.add(value);
+            } else {
+                rightInorder.add(value);
+            }
+        }
+
+        for (int i = 1; i < preOrderList.size(); i++) {
+            if (leftPreOrder.size() < leftInorder.size()) {
+                leftPreOrder.add(preOrderList.get(i));
+            } else {
+                rightPreOrder.add(preOrderList.get(i));
+            }
+        }
+
+        TreeNode result = new TreeNode(rootVal);
+
+        result.left = buildTreeFromPreOrderAndInorderHelp(leftPreOrder, leftInorder);
+        result.right = buildTreeFromPreOrderAndInorderHelp(rightPreOrder, rightInorder);
+
+        return result;
+    }
 }
