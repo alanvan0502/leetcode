@@ -373,4 +373,79 @@ public class Solution {
             }
         }
     }
+
+    /**
+     * Lowest common ancestor of a binary tree
+     */
+    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        List<TreeNode> pAncestors = new ArrayList<>();
+        List<TreeNode> qAncestors = new ArrayList<>();
+
+        findAncestors(root, p, pAncestors);
+        findAncestors(root, q, qAncestors);
+
+        for (int i = pAncestors.size() - 1; i >= 0; i--) {
+            for (int j = qAncestors.size() - 1; j >= 0; j--) {
+                if (pAncestors.get(i).val.equals(qAncestors.get(j).val)) {
+                    return pAncestors.get(i);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static void findAncestors(TreeNode root, TreeNode d, List<TreeNode> list) {
+        if (!isAncestor(root, d)) {
+            return;
+        } else {
+            list.add(root);
+            findAncestors(root.left, d, list);
+            findAncestors(root.right, d, list);
+        }
+    }
+
+    public static boolean isAncestor(TreeNode root, TreeNode d) {
+        if (root == null) {
+            return false;
+        }
+
+        if (root.val.equals(d.val)) {
+            return true;
+        } else {
+            return isAncestor(root.right, d) || isAncestor(root.left, d);
+        }
+    }
+
+    /**
+     * Lowest common ancestor recursive
+     */
+    class AncestorSolution {
+        private TreeNode ans;
+
+        public AncestorSolution() {
+            this.ans = null;
+        }
+
+        private boolean recurseTree(TreeNode currentNode, TreeNode p, TreeNode q) {
+            if (currentNode == null) {
+                return false;
+            }
+
+            int left = recurseTree(currentNode.left, p, q) ? 1 : 0;
+            int right = recurseTree(currentNode.right, p, q) ? 1 : 0;
+            int mid = (currentNode == p || currentNode == q) ? 1 : 0;
+
+            if (mid + left + right >= 2) {
+                this.ans = currentNode;
+            }
+
+            return (mid + left + right > 0);
+        }
+
+        public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+            this.recurseTree(root, p, q);
+            return ans;
+        }
+    }
 }

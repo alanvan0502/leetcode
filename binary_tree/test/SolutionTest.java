@@ -1,27 +1,30 @@
 package binary_tree.test;
 
+import binary_tree.model.Codec;
 import binary_tree.model.Node;
 import binary_tree.model.Solution;
 import binary_tree.model.TreeNode;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 class SolutionTest {
 
-    private TreeNode root = TreeNode.buildBinaryTree(1, 2, 3, 4, 5, 6, 7, null, 8);
-    private TreeNode root1 = TreeNode.buildBinaryTree(1, 2, 2, 3, 3);
-    private TreeNode root2 = TreeNode.buildBinaryTree(2, 97, 97, 47, 80, -7, -7);
-    private TreeNode root3 = TreeNode.buildBinaryTree(5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1);
-    private TreeNode root4 = TreeNode.buildBinaryTree(5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1);
-    private TreeNode root5 = TreeNode.buildBinaryTree(10, 5, -3, 3, 2, null, 11, 3, -2, null, 1);
-    private TreeNode root6 = TreeNode.buildBinaryTree(-2, null, -3);
-    private TreeNode root7 = TreeNode.buildBinaryTree(5, 5, 1);
-    private TreeNode root8 = TreeNode.buildBinaryTree(3, 9, 20, 4, 1, 15, 7, null, null, null, null, 16, 17, null, 5, null, null, null, null, null, 0);
+    private TreeNode root0 = TreeNode.deserialize("[5,2,3,null,null,2,4,3,1]");
+    private TreeNode root = TreeNode.deserialize("[1,2,3,4,5,6,7,null,8]");
+    private TreeNode root1 = TreeNode.deserialize("[1,2,2,3,3]");
+    private TreeNode root2 = TreeNode.deserialize("[2,97,97,47,80,-7,-7]");
+    private TreeNode root3 = TreeNode.deserialize("[5,4,8,11,null,13,4,7,2,null,null,null,1]");
+    private TreeNode root4 = TreeNode.deserialize("[5,4,8,11,null,13,4,7,2,null,null,5,1]");
+    private TreeNode root5 = TreeNode.deserialize("[10,5,-3,3,2,null,11,3,-2,null,1]");
+    private TreeNode root6 = TreeNode.deserialize("[-2,null,-3]");
+    private TreeNode root7 = TreeNode.deserialize("[5,5,1]");
+    private TreeNode root8 = TreeNode.deserialize("[3,9,20,4,1,15,7,null,null,null,null,16,17,null,5,null,null,null,null,null,0]");
 
     @Test
     public void testTraversal() {
+        System.out.println(Solution.inorderTraversal(root0));
         System.out.println(Solution.inorderTraversal(root8));
         System.out.println(Solution.preorderTraversal(root3));
         System.out.println(Solution.postorderTraversal(root8));
@@ -86,5 +89,49 @@ class SolutionTest {
         Node n1 = new Node(1, n2, n3, null);
         Solution.connect(n1);
         System.out.println(n1);
+    }
+
+    @Test
+    void testIsAncestor() {
+        TreeNode t1 = new TreeNode(1);
+        TreeNode t0 = new TreeNode(0);
+        t0.left = t1;
+        TreeNode root = new TreeNode(-1);
+        root.right = t0;
+        TreeNode t2 = new TreeNode(1);
+        System.out.println(Solution.isAncestor(root, t1));
+        System.out.println(Solution.isAncestor(root, t2));
+        System.out.println(Solution.isAncestor(root, root));
+
+        List<TreeNode> ancestors2 = new ArrayList<>();
+        Solution.findAncestors(root, t2, ancestors2);
+        System.out.println(ancestors2);
+
+        List<TreeNode> ancestors1 = new ArrayList<>();
+        Solution.findAncestors(root, t1, ancestors1);
+        System.out.println(ancestors1);
+    }
+
+    @Test
+    void testSerialize() {
+        String r = TreeNode.serialize(root);
+        String r1 = TreeNode.serialize(root1);
+        String r2 = TreeNode.serialize(root2);
+        String r3 = TreeNode.serialize(root3);
+        System.out.println(r);
+        System.out.println(r1);
+        System.out.println(r2);
+        System.out.println(r3);
+
+        System.out.println(TreeNode.serialize(TreeNode.deserialize("[1,2,3,null,null,4,5]")));
+    }
+
+    @Test
+    void testCodec() {
+        Codec codec = new Codec();
+        //System.out.println(codec.serialize(codec.deserialize("[1,2,3,null,null,4,5]")));
+
+        Codec.TreeNode n = codec.deserialize("[5,2,3,null,null,2,4,3,1]");
+        //System.out.println(codec.serialize(codec.deserialize("[10,5,-3,3,2,null,11,3,-2,null,1]")));
     }
 }
